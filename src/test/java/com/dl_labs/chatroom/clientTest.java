@@ -1,4 +1,4 @@
-package test.java.com.dl_labs.chatroom;
+package com.dl_labs.chatroom;
 
 public class clientTest {
     

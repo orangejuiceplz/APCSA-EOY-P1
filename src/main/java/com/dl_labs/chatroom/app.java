@@ -1,4 +1,4 @@
-package com.dl_labs;
+package com.dl_labs.chatroom;
 
 /**
  * Hello world!
