@@ -1,5 +1,5 @@
 package com.dl_labs.chatroom;
 
-public class clientTest {
+public class ClientTest {
     
 }

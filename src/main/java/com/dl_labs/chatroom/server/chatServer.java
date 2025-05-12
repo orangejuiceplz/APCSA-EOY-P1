@@ -1,6 +1,6 @@
 package com.dl_labs.chatroom.server;
 
 
-public class chatServer {
+public class ChatServer {
     
 }
