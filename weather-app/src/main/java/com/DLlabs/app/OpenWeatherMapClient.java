@@ -5,6 +5,7 @@ package src.main.java.com.DLlabs.app;
  */
 public class OpenWeatherMapClient {
     public static void main(String[] args) {
-        OpenWeatherMapClient client = new OpenWeatherMapClient(apikey_codespace);
+        String secret = apikey_codespace; // put YOUR api key here!
+        OpenWeatherMapClient client = new OpenWeatherMapClient(secret);
     }
 }
