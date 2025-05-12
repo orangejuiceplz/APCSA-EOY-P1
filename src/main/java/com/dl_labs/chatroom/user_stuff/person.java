@@ -8,6 +8,6 @@ public class Person {
     public Person(String name, boolean isHost) {
         this.name = name;
         this.isHost = isHost;
-    }
+        }
 
 }
