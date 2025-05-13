@@ -1,12 +1,16 @@
 package com.dl_labs.chatroom.games.tictacttoe;
-
+import java.util.*;
 
 public class TicTacToe {
     private String p1Char;
-    private Sring p2Char;    
+    private String p2Char;    
+    private String[][] board = new String[3][3];
+    public TicTacToe(String p1Char, String p2Char) {
+        this.p1Char = p1Char;
+        this.p2Char = p2Char;
+    }
     
-    public TicTacToe(String player1Symbol, String player2Symbol) {
-        p1Char = player1Symbol;
-        p2Char = player2Symbol;
-            }
+    public checkWin() {
+    }
+    
 }
