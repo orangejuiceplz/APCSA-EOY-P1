@@ -12,17 +12,27 @@ public class ChatServer {
     private final ArrayList<ClientHandler> clients = new ArrayList<>();
     private final ArrayList<Person> people = new ArrayList<>();
     private final int port;
+    private final String chatName;
     private boolean isServerRunning = false;
 
     public ChatServer(int port) {
+        this(port, "Default Chatroom");
+    }
+
+    public ChatServer(int port, String chatName) {
         this.port = port;
+        this.chatName = chatName;
+    }
+
+    public String getChatName() {
+        return chatName;
     }
 
     public void tryStart() {
         try {
             serverSocket = new ServerSocket(port);
             isServerRunning = true;
-            System.out.println("created a server started on port " + port);
+            System.out.println("created chatroom '" + chatName + "' on port " + port);
             while (isServerRunning) {
                 Socket socket = serverSocket.accept(); // https://docs.oracle.com/javase/8/docs/api/java/net/ServerSocket.html
                 ClientHandler clientHandler = new ClientHandler(socket, this);
