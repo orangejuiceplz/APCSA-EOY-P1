@@ -30,7 +30,7 @@ public class ChatServer {
                 clientHandler.start();
             }
         } catch (IOException e) {
-            System.out.println("Error starting server: " + e.getMessage());
+            System.out.println("error starting server: " + e.getMessage());
         } finally {
             stopServer();
         }
@@ -41,9 +41,9 @@ public class ChatServer {
         if (serverSocket != null && !serverSocket.isClosed()) {
             try {
                 serverSocket.close();
-                System.out.println("Server stopped.");
+                System.out.println("server stopped.");
             } catch (IOException e) {
-                System.out.println("Error stopping server: " + e.getMessage());
+                System.out.println("error stopping server: " + e.getMessage());
             }
         }
     }
@@ -56,7 +56,6 @@ public class ChatServer {
         }
     }
     
-    // New method to send private messages between users
     public boolean sendPrivateMessage(Message message, String recipientName) {
         for (ClientHandler client : clients) {
             Person person = client.getPerson();
@@ -65,13 +64,12 @@ public class ChatServer {
                 return true;
             }
         }
-        return false; // Recipient not found
+        return false; // only if recipient isn't foudn
     }
     
     public void removeClient(ClientHandler clientHandler) {
         clients.remove(clientHandler);
         
-        // Also remove the person associated with this client
         if (clientHandler.getPerson() != null) {
             people.remove(clientHandler.getPerson());
         }

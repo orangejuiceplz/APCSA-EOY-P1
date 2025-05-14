@@ -46,7 +46,7 @@ public class App {
         }).start();
         
         try {
-            Thread.sleep(1000); // Wait a bit for server to start
+            Thread.sleep(1000); 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -66,34 +66,28 @@ public class App {
             PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             
-            // Send username first to identify on the server
             output.println(username);
             
-            // Create a Person object for the current user
             Person user = new Person(username, false);
-            
-            // Start a thread to receive and display messages
-            new Thread(() -> {
+                        new Thread(() -> {
                 try {
                     String receivedText;
                     while ((receivedText = input.readLine()) != null) {
-                        // Just display the message as is since it's already formatted
-                        // by the server using Message.format()
+
                         System.out.println(receivedText);
                     }
                 } catch (IOException e) {
-                    System.out.println("Disconnected from the server.");
+                    System.out.println("disconnected from the server.");
                 }
             }).start();
             
             // Help text
-            System.out.println("Commands:");
-            System.out.println("- Type your message and press Enter to send");
-            System.out.println("- Start with /p [username] to send a private message");
-            System.out.println("- Type /help for commands");
-            System.out.println("- Type 'exit' to leave the chat");
+            System.out.println("the commands:");
+            System.out.println("- type your message and press 'Enter' to send");
+            System.out.println("- start with /p [username] to send a private message");
+            System.out.println("- type /help for commands");
+            System.out.println("- type 'exit' to leave the chat");
             
-            // Main loop to read and send user input
             String userInput;
             while (scanner.hasNextLine()) {
                 userInput = scanner.nextLine();
@@ -102,39 +96,33 @@ public class App {
                     break;
                 }
                 
-                // Create an appropriate Message object based on input
                 Message message;
                 
                 if (userInput.startsWith("/p ")) {
-                    // Private message format: /p username message
                     int spaceIndex = userInput.indexOf(' ', 3);
                     if (spaceIndex > 0) {
                         String recipient = userInput.substring(3, spaceIndex);
                         String content = userInput.substring(spaceIndex + 1);
                         message = new Message("@" + recipient + " " + content, user, MessageType.PRIVATE);
                     } else {
-                        System.out.println("Invalid private message format. Use: /p username message");
+                        System.out.println("bad private message format. use: /p username message");
                         continue;
                     }
                 } else if (userInput.startsWith("/")) {
-                    // Command message
                     message = new Message(userInput, user, MessageType.COMMAND);
                 } else {
-                    // Regular chat message
                     message = new Message(userInput, user);
                 }
                 
-                // Send the message content to the server
-                // (the server will handle creating Message objects with the sender)
                 output.println(message.getContent());
             }
             
             socket.close();
-            System.out.println("Disconnected from chat server.");
+            System.out.println("disconnected from chat server.");
             scanner.close();
             
         } catch (IOException e) {
-            System.out.println("Error connecting to server: " + e.getMessage());
+            System.out.println("error connecting to server: " + e.getMessage());
         }
     }
-}
+} 
