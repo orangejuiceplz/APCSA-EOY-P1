@@ -3,6 +3,7 @@ package com.dl_labs.chatroom;
 import java.util.Scanner;
 import java.io.*;
 import java.net.*;
+import java.time.format.DateTimeFormatter;
 
 import com.dl_labs.chatroom.server.ChatServer;
 import com.dl_labs.chatroom.user_stuff.Message;
@@ -24,14 +25,30 @@ public class App {
         scanner.nextLine(); 
         
         if (choice == 1) {
-            System.out.println("starting a chatroom server on port " + DEFAULT_PORT);
-            createChatroom();
+            System.out.print("enter a name for your chatroom: ");
+            String chatroomName = scanner.nextLine();
+            
+            System.out.print("enter port number (press Enter for default " + DEFAULT_PORT + "): ");
+            String portInput = scanner.nextLine();
+            int port = portInput.isEmpty() ? DEFAULT_PORT : Integer.parseInt(portInput);
+            
+            System.out.println("starting a chatroom server '" + chatroomName + "' on port " + port);
+            createChatroom(chatroomName, port);
         } else if (choice == 2) {
             System.out.println("joining an existing chatroom");
             System.out.println("make sure the server is running before joining");
-            System.out.print("enter the server IP address: ");
+            
+            System.out.print("enter the server IP address (press Enter for localhost): ");
             String serverIP = scanner.nextLine();
-            joinChatroom(serverIP);
+            if (serverIP.isEmpty()) {
+                serverIP = "localhost";
+            }
+            
+            System.out.print("enter port number (press Enter for default " + DEFAULT_PORT + "): ");
+            String portInput = scanner.nextLine();
+            int port = portInput.isEmpty() ? DEFAULT_PORT : Integer.parseInt(portInput);
+            
+            joinChatroom(serverIP, port);
         } else {
             System.out.println("invalid choice. exiting...");
         }
@@ -39,9 +56,9 @@ public class App {
         scanner.close();
     }
     
-    private static void createChatroom() {
+    private static void createChatroom(String chatroomName, int port) {
         new Thread(() -> {
-            ChatServer server = new ChatServer(DEFAULT_PORT);
+            ChatServer server = new ChatServer(port, chatroomName);
             server.tryStart();
         }).start();
         
@@ -51,16 +68,16 @@ public class App {
             e.printStackTrace();
         }
         
-        joinChatroom("localhost");
+        joinChatroom("localhost", port);
     }
     
-    private static void joinChatroom(String serverIP) {
+    private static void joinChatroom(String serverIP, int port) {
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.print("enter your username: ");
             String username = scanner.nextLine();
             
-            Socket socket = new Socket(serverIP, DEFAULT_PORT);
+            Socket socket = new Socket(serverIP, port);
             System.out.println("Connected to the server!");
             
             PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
@@ -69,11 +86,10 @@ public class App {
             output.println(username);
             
             Person user = new Person(username, false);
-                        new Thread(() -> {
+            new Thread(() -> {
                 try {
                     String receivedText;
                     while ((receivedText = input.readLine()) != null) {
-
                         System.out.println(receivedText);
                     }
                 } catch (IOException e) {
@@ -81,7 +97,6 @@ public class App {
                 }
             }).start();
             
-            // Help text
             System.out.println("the commands:");
             System.out.println("- type your message and press 'Enter' to send");
             System.out.println("- start with /p [username] to send a private message");
@@ -104,6 +119,8 @@ public class App {
                         String recipient = userInput.substring(3, spaceIndex);
                         String content = userInput.substring(spaceIndex + 1);
                         message = new Message("@" + recipient + " " + content, user, MessageType.PRIVATE);
+                        System.out.println("[" + message.getTimestamp().format(DateTimeFormatter.ofPattern("HH:mm:ss")) + 
+                                          "] [Private message to " + recipient + "]: " + content);
                     } else {
                         System.out.println("bad private message format. use: /p username message");
                         continue;
@@ -112,6 +129,7 @@ public class App {
                     message = new Message(userInput, user, MessageType.COMMAND);
                 } else {
                     message = new Message(userInput, user);
+                    System.out.println(message.format());
                 }
                 
                 output.println(message.getContent());
@@ -125,4 +143,4 @@ public class App {
             System.out.println("error connecting to server: " + e.getMessage());
         }
     }
-} 
+}
