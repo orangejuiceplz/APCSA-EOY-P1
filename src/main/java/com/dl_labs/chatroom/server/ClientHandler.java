@@ -10,7 +10,7 @@ import com.dl_labs.chatroom.user_stuff.Person;
 
 
 
-public class ClientHandler {
+public class ClientHandler extends Thread {
     private final ChatServer chatServer;
     private final Socket clientSocket;
     private PrintWriter output;
@@ -23,15 +23,14 @@ public class ClientHandler {
         this.chatServer = chatServer;
     }
 
-    @Override
     public void run() {
         try {
             output = new PrintWriter(clientSocket.getOutputStream(), true);
             input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            String userName = input.readLine()
+            String userName = input.readLine();
             boolean isHost = false;
 
-            if (chatServer.getUsers().isEmpty()) {
+            if (chatServer.getPeople().isEmpty()) {
                 isHost = true;
             }
 
@@ -43,7 +42,7 @@ public class ClientHandler {
 
             String inputLine;
 
-            while (running && (inputLine = in.readLine()) != null) {
+            while (running && (inputLine = input.readLine()) != null) {
                 System.out.println("Message from " + userName + ": " + inputLine);
                 chatServer.broadcastMessage(userName + ": " + inputLine, this);
             }
@@ -76,9 +75,11 @@ public class ClientHandler {
 
             chatServer.removeClient(this);
 
-            if (user != null) {
-                chatServer.broadcastMessage(user.getName() + " has left the chat.", this);
+            if (person != null) {
+                chatServer.broadcastMessage(person.getName() + " has left the chat.", this);
             }
+        } catch (IOException e) {
+            System.out.println("Error disconnecting client: " + e.getMessage());
         }
     }
 }

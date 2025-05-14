@@ -4,7 +4,7 @@ python
 scratch
 
 imp
-can you make basic server functionality according to teh readme, just set up the server function thats it, accroding to readme etc
+
 
 # stuff
 
