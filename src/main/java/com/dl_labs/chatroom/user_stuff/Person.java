@@ -10,4 +10,18 @@ public class Person {
         this.isHost = isHost;
         }
 
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public boolean isHost() {
+        return isHost;
+    }
+    public void setHost(boolean isHost) {
+        this.isHost = isHost;
+    }
+    
+
 }
