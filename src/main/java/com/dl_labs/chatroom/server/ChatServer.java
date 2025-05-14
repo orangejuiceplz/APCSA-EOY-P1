@@ -55,8 +55,26 @@ public class ChatServer {
             }
         }
     }
+    
+    // New method to send private messages between users
+    public boolean sendPrivateMessage(Message message, String recipientName) {
+        for (ClientHandler client : clients) {
+            Person person = client.getPerson();
+            if (person != null && person.getName().equals(recipientName)) {
+                client.sendMessage(message.format());
+                return true;
+            }
+        }
+        return false; // Recipient not found
+    }
+    
     public void removeClient(ClientHandler clientHandler) {
         clients.remove(clientHandler);
+        
+        // Also remove the person associated with this client
+        if (clientHandler.getPerson() != null) {
+            people.remove(clientHandler.getPerson());
+        }
     }
 
     public void addUser(Person person) {
