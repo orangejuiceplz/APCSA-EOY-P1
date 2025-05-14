@@ -39,7 +39,7 @@ public class ClientHandler extends Thread {
             person = new Person(userName, isHost);
             chatServer.addUser(person);
 
-            Message welcomeMessage = new Message("welcome " + userName + "! you are now connected to the chat server.");
+            Message welcomeMessage = new Message("welcome to '" + chatServer.getChatName() + "'! you are now connected.");
             sendMessage(welcomeMessage.format());
             
             Message joinMessage = new Message(userName + " has joined the chat.");
@@ -47,7 +47,6 @@ public class ClientHandler extends Thread {
 
             String inputLine;
             while (running && (inputLine = input.readLine()) != null) {
-                System.out.println("message from " + userName + ": " + inputLine);
                 
                 Message message;
                 
