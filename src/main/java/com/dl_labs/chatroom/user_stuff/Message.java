@@ -79,9 +79,9 @@ public class Message {
             case COMMAND:
                 return "[" + time + "] " + sender.getName() + " (command): " + content;
             case PRIVATE:
-                return "[" + time + "] (private) " + sender.getName() + ": " + content;
+                return "[" + time + "] [Private message from " + sender.getName() + "]: " + content;
             default:
-                return content;
+                return "[" + time + "] " + content;
         }
     }
     
