@@ -18,14 +18,15 @@ public class App {
         System.out.print("enter your choice (1 or 2): ");
         
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
         
         if (choice == 1) {
-            // Start a server
+            
             System.out.println("starting a chatroom server on port " + DEFAULT_PORT);
             createChatroom();
         } else if (choice == 2) {
-            // Join a server
+            System.out.println("joining an existing chatroom");
+            System.out.println("make sure the server is running before joining");
             System.out.print("enter the server IP address: ");
             String serverIP = scanner.nextLine();
             joinChatroom(serverIP);
@@ -37,44 +38,41 @@ public class App {
     }
     
     private static void createChatroom() {
-        // Start server in a separate thread so it doesn't block
+        
         new Thread(() -> {
             ChatServer server = new ChatServer(DEFAULT_PORT);
             server.tryStart();
         }).start();
         
-        // Give the server a moment to start
+        
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         
-        // Connect to the server as a client
+        
         joinChatroom("localhost");
     }
     
     private static void joinChatroom(String serverIP) {
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter your username: ");
+            System.out.print("enter your username: ");
             String username = scanner.nextLine();
             
             Socket socket = new Socket(serverIP, DEFAULT_PORT);
-            System.out.println("Connected to the server!");
+            System.out.println("connected to the server!");
             
-            // Set up input and output streams
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             
-            // Send username to the server
-            out.println(username);
+            output.println(username);
             
-            // Start a thread to receive messages from the server
             new Thread(() -> {
                 try {
                     String message;
-                    while ((message = in.readLine()) != null) {
+                    while ((message = input.readLine()) != null) {
                         System.out.println(message);
                     }
                 } catch (IOException e) {
@@ -82,22 +80,20 @@ public class App {
                 }
             }).start();
             
-            // Read user input and send messages
             String message;
             while (scanner.hasNextLine()) {
                 message = scanner.nextLine();
-                out.println(message);
+                output.println(message);
                 if (message.equalsIgnoreCase("exit")) {
                     break;
                 }
             }
             
-            // Close resources
             socket.close();
             scanner.close();
             
         } catch (IOException e) {
-            System.out.println("Error connecting to server: " + e.getMessage());
+            System.out.println("error connecting to server: " + e.getMessage());
         }
     }
 }
