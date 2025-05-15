@@ -56,6 +56,28 @@ public class NetworkUtils {
     }
     
 
+    public static boolean isPortAvailable(int port) {
+        if (port < 0 || port > 65535) {
+            return false;
+        }
+        
+        try (ServerSocket socket = new ServerSocket(port)) {
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+    
+    public static int findAvailablePort(int startPort) {
+        for (int port = startPort; port <= 65535; port++) {
+            if (isPortAvailable(port)) {
+                return port;
+            }
+        }
+        return -1;
+    }
+    
+    
     
     
 }
