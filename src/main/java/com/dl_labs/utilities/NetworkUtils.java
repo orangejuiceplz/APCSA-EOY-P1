@@ -31,6 +31,31 @@ public class NetworkUtils {
             return "127.0.0.1";
         }
     }
+
+    // lists ALL of the local IP addresses
+    public static ArrayList<String> getAllLocalIPs(boolean includeLoopback) {
+        ArrayList<String> allAddresses = new ArrayList<>();
+        try {
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces(); // wtf is this
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = networkInterfaces.nextElement();
+                if (networkInterface.isUp() && (!networkInterface.isLoopback() || includeLoopback)) {
+                    Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+                    while (inetAddresses.hasMoreElements()) {
+                        InetAddress inetAddress = inetAddresses.nextElement();
+                        if (inetAddress instanceof Inet4Address) {
+                            allAddresses.add(inetAddress.getHostAddress());
+                        }
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            System.err.println("Error getting network interfaces: " + e.getMessage());
+        }
+        return allAddresses;
+    }
+    
+
     
     
 }
