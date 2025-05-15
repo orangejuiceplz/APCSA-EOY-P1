@@ -98,8 +98,22 @@ public class NetworkUtils {
         }
     }
     
+    public static String getHostnameFromIP(String ipAddress) {
+        try {
+            InetAddress addr = InetAddress.getByName(ipAddress);
+            return addr.getHostName();
+        } catch (UnknownHostException e) {
+            return null;
+        }
+    }
     
-    
-    
+    public static String getIPFromHostname(String hostname) {
+        try {
+            InetAddress addr = InetAddress.getByName(hostname);
+            return addr.getHostAddress();
+        } catch (UnknownHostException e) {
+            return null;
+        }
+    }
 
 }
