@@ -30,7 +30,7 @@ public class App {
             
             System.out.print("enter port number (press Enter for default " + DEFAULT_PORT + "): ");
             String portInput = scanner.nextLine();
-            int port = portInput.isEmpty() ? DEFAULT_PORT : Integer.parseInt(portInput);
+            int port = portInput.isEmpty() ? DEFAULT_PORT : Integer.parseInt(portInput); // weird way to do an if else statement
             
             System.out.println("starting a chatroom server '" + chatroomName + "' on port " + port);
             createChatroom(chatroomName, port);
