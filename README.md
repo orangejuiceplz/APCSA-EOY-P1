@@ -1,17 +1,10 @@
-# APCSA-EOY-P1
-java
-python
-scratch
 
-imp
-
-
-# stuff
-
-NEW IDEA
-
-We changed our idea to make a chatroom. The premise is that the user can have two choices → Make a chatroom themself or connect to the chatroom. If they make a chatroom, then they're computer will be the "host". Same thing, we're still going to make  projects and research tools. The IDE is probably going to be intellij idea. We need to utilize some sort of I/O so we can send data to and from each computer. We might store each user connected via the chatroom to an ArrayList of type People or something.
-
-Planning on creating an extension to play games like blackjack. The host can ask if people want to play the game, etc..
-
-The plan is that we're going to start coding some of the basic functionality of the program. We're going to start with how each of the users is stored in the server and allow for someone to host a server.
+| Class Day | Plan for the Day (What do you hope to finish?) |
+| :---: | :---- |
+| 1 | OLD IDEA Decide on an idea for the project. Make a repository and research what tools we might need to complete the project (IDE, imports, etc.)  We decided on the idea to make a weather app utilizing [openweathermap.com](http://openweathermap.com)'s api. We might also need to utilize another api, google's zip code to longitude latitude  so we can get the location for the actual weather app api. NEW IDEA We changed our idea to make a chatroom. The premise is that the user can have two choices → Make a chatroom themself or connect to the chatroom. If they make a chatroom, then they're computer will be the "host". Same thing, we're still going to make  projects and research tools. The IDE is probably going to be intellij idea. We need to utilize some sort of I/O so we can send data to and from each computer. We might store each user connected via the chatroom to an ArrayList of type People or something. Planning on creating an extension to play games like blackjack. The host can ask if people want to play the game, etc..  |
+| 2 | The plan is that we're going to start coding some of the basic functionality of the program. We're going to start with how each of the users is stored in the server and allow for someone to host a server. |
+| 3 | After finishing the basic server functionality, I want to add some more specific features such as private messaging and basic commands. I would need to make specific outputs and switch statements depending on the command, there might be other ways we could do this, but from what I've researched so far, switch statements seem like the best way to go. Might start working on games |
+| 4 | At this point, most of the application should be done. Me and Dan might consider starting to start putting more of our effort into the game extension of the app. After finishing the implementation of TicTacToe, we're going to implement blackjack. The basic logic should be very simple, however, I'm going to change the rules to a different version that I used to play. |
+| 5 | By today, we should have completed almost the entire project. I want to convert from a traditional terminal into a typical GUI with java Swing. I want to implement some utilities for network stuff, and if the user wants to run in terminal mode, some terminal utilities to make life better |
+| 6 | The complete application should be done, Now we just need to work on the Google Slides presentation. There really isn't anything else we can do so we might add some other features to spice up the application such as a toggle for dark and night mode or just a better UI with java swing  |
+| 7-8 | Presentation |
