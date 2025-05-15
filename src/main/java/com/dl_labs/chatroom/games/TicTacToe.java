@@ -1,5 +1,5 @@
-package com.dl_labs.chatroom.games;
-/* 
+ package com.dl_labs.chatroom.games;
+
 import java.util.*;
 
 public class TicTacToe {
@@ -14,6 +14,12 @@ public class TicTacToe {
     public TicTacToe(char p1Char, char p2Char) {
         this.p1Char = p1Char;
         this.p2Char = p2Char;
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                board[i][j] = '_';
+            }
+        }
     }
     
     public boolean checkWin(char currentPlayer) {
@@ -35,16 +41,27 @@ public class TicTacToe {
         return false;
     }
 
-    public boolean addMove(int row, int col, char player) {
-        if (board[row][col] == "") {
+    public void addMove(int row, int col, char player) {
+        //System.out.println("|" + board[row][col] + "|");
+        if (board[row][col] == '_') {
             board[row][col] = player;
-        } else { return false; }
+        } 
         if (checkWin(player)) {
             System.out.println("Game Over, " + player + " won!");
         }
     }
 
-    public int getPos()
+    public int getMove() {
+
+        System.out.println("[1 2 3] |  [" + board[0][0] + " " + board[0][1] + " " + board[0][2] + " ]");
+        System.out.println("[4 5 6] |  [" + board[1][0] + " " + board[1][1] + " " + board[1][2] + " ]");
+        System.out.println("[7 8 9] |  [" + board[2][0] + " " + board[2][1] + " " + board[2][2] + " ]");
+        int answer = scanner.nextLine();
+        try {
+            if (bo)
+        }
+        }
+
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -63,11 +80,20 @@ public class TicTacToe {
             secondLetter = scanner.nextLine();
         }
         System.out.println("Player one is '" + firstLetter + "', Player two is '" + secondLetter + "'");
+        char firstChar = firstLetter.charAt(0);
+        char secondChar = secondLetter.charAt(0);
+        TicTacToe game = new TicTacToe(firstChar, secondChar);
 
-        while (checkWin(firstLetter) == false && checkWin(secondLetter) == false) {
-            System.out.println("Player 1, choose your location")
+
+        while (game.checkWin(firstChar) == false && game.checkWin(secondChar) == false) {
+            System.out.println("Player 1, choose your location");
+            game.addMove(0, 0, 'X');
+            game.addMove(2, 2, 'O');
+            game.getMove();
+            
+            break;
         }
     }
     
 }
-*/
+ 
