@@ -77,7 +77,12 @@ public class NetworkUtils {
         return -1;
     }
     
+    public static boolean isValidIpAddress(String ip) {
+        if (ip == null || ip.isEmpty()) {
+            return false;
+        }
+        return IP_PATTERN.matcher(ip).matches() || ip.equals("localhost");
+    }
     
-    
-    
+
 }
