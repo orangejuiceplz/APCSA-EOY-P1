@@ -84,5 +84,22 @@ public class NetworkUtils {
         return IP_PATTERN.matcher(ip).matches() || ip.equals("localhost");
     }
     
+        public static boolean isValidPort(int port) {
+        return port >= 0 && port <= 65535;
+    }
+    
+    // ping a host
+    public static boolean testConnection(String host, int port, int timeout) {
+        try (Socket socket = new Socket()) {
+            socket.connect(new InetSocketAddress(host, port), timeout);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+    
+    
+    
+    
 
 }
