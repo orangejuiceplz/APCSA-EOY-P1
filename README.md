@@ -8,3 +8,5 @@
 | 5 | By today, we should have completed almost the entire project. I want to convert from a traditional terminal into a typical GUI with java Swing. I want to implement some utilities for network stuff, and if the user wants to run in terminal mode, some terminal utilities to make life better |
 | 6 | The complete application should be done, Now we just need to work on the Google Slides presentation. There really isn't anything else we can do so we might add some other features to spice up the application such as a toggle for dark and night mode or just a better UI with java swing  |
 | 7-8 | Presentation |
+
+workflow
