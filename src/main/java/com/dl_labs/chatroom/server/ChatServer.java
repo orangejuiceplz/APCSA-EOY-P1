@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import com.dl_labs.chatroom.user_stuff.*;
+import com.dl_labs.chatroom.games.GameManager;
 
 
 public class ChatServer {
@@ -14,6 +15,7 @@ public class ChatServer {
     private final int port;
     private final String chatName;
     private boolean isServerRunning = false;
+    private final GameManager gameManager;
 
     public ChatServer(int port) {
         this(port, "Default Chatroom");
@@ -22,6 +24,7 @@ public class ChatServer {
     public ChatServer(int port, String chatName) {
         this.port = port;
         this.chatName = chatName;
+        this.gameManager = new GameManager(this);
     }
 
     public String getChatName() {
@@ -93,4 +96,26 @@ public class ChatServer {
         return people;
     }
 
+    // Get GameManager
+    public GameManager getGameManager() {
+        return gameManager;
+    }
+
+    // These methods are used by the game system
+    public void sendMessageToPerson(String message, Person person) {
+        for (ClientHandler client : clients) {
+            if (client.getPerson() != null && client.getPerson().equals(person)) {
+                client.sendMessage(message);
+                return;
+            }
+        }
+    }
+
+    public void broadcastMessageToPlayers(String message, ArrayList<Person> players) {
+        for (ClientHandler client : clients) {
+            if (client.getPerson() != null && players.contains(client.getPerson())) {
+                client.sendMessage(message);
+            }
+        }
+    }
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import com.dl_labs.chatroom.user_stuff.Message;
 import com.dl_labs.chatroom.user_stuff.Person;
@@ -89,6 +90,10 @@ public class ClientHandler extends Thread {
                         Message usersMessage = new Message(userList.toString(), null, MessageType.SYSTEM);
                         sendMessage(usersMessage.format());
                         continue;
+                    } else if (inputLine.startsWith("/game")) {
+                        handleGameCommand(inputLine);
+                    } else if (inputLine.startsWith("/join")) {
+                        joinGame();
                     }
                 } else {
                     message = new Message(inputLine, person);
@@ -135,6 +140,59 @@ public class ClientHandler extends Thread {
             }
         } catch (IOException e) {
             System.out.println("err disconnecting client: " + e.getMessage());
+        }
+    }
+
+    private void handleGameCommand(String input) {
+        if (!person.isHost()) {
+            Message errorMsg = new Message("Only the host can start games.", null, MessageType.SYSTEM);
+            sendMessage(errorMsg.format());
+            return;
+        }
+        
+        String[] parts = input.split("\\s+", 2);
+        if (parts.length == 1) {
+            // Just "/game" - show available games
+            ArrayList<String> games = chatServer.getGameManager().getAvailableGames();
+            if (games.isEmpty()) {
+                Message errorMsg = new Message("No games are available.", null, MessageType.SYSTEM);
+                sendMessage(errorMsg.format());
+            } else {
+                StringBuilder gameList = new StringBuilder("Available games:\n");
+                for (String game : games) {
+                    gameList.append("- ").append(game).append("\n");
+                }
+                gameList.append("To start a game: /game <game_name>");
+                Message gamesMsg = new Message(gameList.toString(), null, MessageType.SYSTEM);
+                sendMessage(gamesMsg.format());
+            }
+        } else {
+            // "/game <name>" - start the specified game
+            String gameName = parts[1].trim();
+            if (chatServer.getGameManager().hasActiveGame()) {
+                Message errorMsg = new Message("A game is already in progress.", null, MessageType.SYSTEM);
+                sendMessage(errorMsg.format());
+            } else {
+                boolean started = chatServer.getGameManager().startGame(gameName, person);
+                if (!started) {
+                    Message errorMsg = new Message("Failed to start game '" + gameName + "'. Game may not exist.", null, MessageType.SYSTEM);
+                    sendMessage(errorMsg.format());
+                }
+            }
+        }
+    }
+
+    private void joinGame() {
+        if (!chatServer.getGameManager().hasActiveGame()) {
+            Message errorMsg = new Message("No game is currently active to join.", null, MessageType.SYSTEM);
+            sendMessage(errorMsg.format());
+            return;
+        }
+        
+        boolean joined = chatServer.getGameManager().joinGame(person);
+        if (!joined) {
+            Message errorMsg = new Message("Failed to join the game. The game may be full or you may already be in it.", null, MessageType.SYSTEM);
+            sendMessage(errorMsg.format());
         }
     }
 }
