@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "SheetsQuickstart",
+            "request": "launch",
+            "mainClass": "com.dl_labs.chatroom.games.CardsAgainstHumanity.SheetsQuickstart",
+            "projectName": "chatroom"
+        },
+        {
+            "type": "java",
+            "name": "TicTacToe",
+            "request": "launch",
+            "mainClass": "com.dl_labs.chatroom.games.tictactoe.TicTacToe",
+            "projectName": "chatroom"
+        },
+        {
+            "type": "java",
             "name": "TicTacToe",
             "request": "launch",
             "mainClass": "com.dl_labs.chatroom.App",
