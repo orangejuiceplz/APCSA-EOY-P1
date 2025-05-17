@@ -7,10 +7,15 @@ import java.lang.Math.*;
 
 public class CardsAgainstHumanity {
     private Arraylist<int> numsUsed = new Arraylist<>();
+    
     public String getRandomPrompt() {
         int randomNum = (int)((Math.random() * 316) + 7);
-        if (numsUsed.contains()) 
-
+        if (numsUsed.contains(randomNum)) {
+            getRandomPrompt();
+        } else {
+            numsUsed.add(randomNum);
+            return row[randomNum];
+        }
     }
 
 
