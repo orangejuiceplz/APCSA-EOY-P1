@@ -1,4 +1,4 @@
-package com.dl_labs.chatroom.games.CardsAgainstHumanity;
+//package com.dl_labs.chatroom.games.CardsAgainstHumanity;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,7 +12,7 @@ public class CardsAgainstHumanity {
     private ArrayList<Integer> numsUsed = new ArrayList<>();
     private int numPlayers;
     private int numApples;
-    //private boolean requireTwoCards = false;
+    private boolean boolRequireTwoCards = false;
     private int[] requiresTwoCards = {7, 8, 32, 37, 42, 70, 76, 81, 88, 91, 110, 111, 124, 125, 132, 135, 143, 154, 155, 172, 196, 200, 203, 218, 283, 298, 301, 309};
 
     public CardsAgainstHumanity(int numberOfPlayers) {
@@ -22,7 +22,7 @@ public class CardsAgainstHumanity {
      public static String getElementFromArray(int rowIndex, int colIndex) throws Exception {
         String csvURL = "https://docs.google.com/spreadsheets/d/1lsy7lIwBe-DWOi2PALZPf5DgXHx9MEvKfRw1GaWQkzg/export?format=csv&gid=10";
         List<String[]> data = new ArrayList<>();
-        rowIndex--;
+        rowIndex++;
         colIndex++;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URI(csvURL).toURL().openStream()))) {
             String line;
@@ -66,12 +66,15 @@ public class CardsAgainstHumanity {
 
     public String getRandomPrompt() {
     int randomNum = (int)((Math.random() * 316) + 7);
-    if (randomNum == 158 || randomNum == 6) { // ^^^^
+    if (randomNum == 158 || randomNum == 6 || numsUsed.indexOf(randomNum) != -1) { // ^^^^
         return getRandomPrompt();
     }
-    try {
+        try {
         numsUsed.add(randomNum);
-        return getElementFromArray(randomNum, 1);
+        if (requiresTwoCards.indexOf(randomNum) !( -1{
+            boolRequireTwoCards = true;
+        } else {boolRequireTwoCards = false; }
+        return getElementFromArray(randomNum, 0);
         /*if () {
             require2Cards = true;
         }*/
@@ -80,7 +83,7 @@ public class CardsAgainstHumanity {
     }
 }
 
-https://prod.liveshare.vsengsaas.visualstudio.com/join?61675A17A63D20BFABDDE510BA2D78B10929
+
 
     public static void main(String[] args) throws Exception {
 
@@ -89,7 +92,7 @@ https://prod.liveshare.vsengsaas.visualstudio.com/join?61675A17A63D20BFABDDE510B
     CardsAgainstHumanity e = new CardsAgainstHumanity(5);
         
     //System.out.println(e.getRandomPrompt());
-    System.out.println(getElementFromArray(7, 1));
+    System.out.println(e.getRandomPrompt());
 }
 
 
