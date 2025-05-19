@@ -101,7 +101,7 @@ public class TicTacToeAdapter implements Game {
     
     private String getBoardDisplay() {
         StringBuilder display = new StringBuilder();
-        display.append("```\n");  // Use code block for better formatting
+        display.append("\n");
         display.append("┌───┬───┬───┐\n");
         
         for (int i = 0; i < 3; i++) {
@@ -112,6 +112,12 @@ public class TicTacToeAdapter implements Game {
                 if (cell == '_') {
                     // Show position number instead of blank space
                     display.append(i * 3 + j + 1);
+                } else if (cell == 'X') {
+                    // Add color formatting for X (using console color codes)
+                    display.append("X");
+                } else if (cell == 'O') {
+                    // Add color formatting for O
+                    display.append("O");
                 } else {
                     display.append(cell);
                 }
@@ -125,7 +131,6 @@ public class TicTacToeAdapter implements Game {
         }
         
         display.append("└───┴───┴───┘\n");
-        display.append("```\n");
         
         return display.toString();
     }

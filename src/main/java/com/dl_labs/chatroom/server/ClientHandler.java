@@ -49,6 +49,15 @@ public class ClientHandler extends Thread {
             String inputLine;
             while (running && (inputLine = input.readLine()) != null) {
                 
+                if (chatServer.getGameManager().hasActiveGame() && 
+                    chatServer.getGameManager().isPlayerInGame(person) && 
+                    isGameInput(inputLine)) {
+                    
+                    // Route input to game manager
+                    chatServer.getGameManager().handleGameInput(person, inputLine);
+                    continue;
+                }
+                
                 Message message;
                 
                 if (inputLine.startsWith("@")) {
@@ -194,5 +203,15 @@ public class ClientHandler extends Thread {
             Message errorMsg = new Message("Failed to join the game. The game may be full or you may already be in it.", null, MessageType.SYSTEM);
             sendMessage(errorMsg.format());
         }
+    }
+
+    // Helper method to determine if input should be treated as a game command
+    private boolean isGameInput(String input) {
+        // This is a simple check for TicTacToe (1-9)
+        // Can be expanded for other games as needed
+        if (input.trim().matches("\\d+")) {
+            return true;
+        }
+        return false;
     }
 }

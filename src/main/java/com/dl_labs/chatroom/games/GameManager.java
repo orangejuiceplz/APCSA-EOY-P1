@@ -43,7 +43,6 @@ public class GameManager {
     }
 
     private void registerGames() {
-        // Use TicTacToeAdapter instead of TicTacToe directly
         availableGames.add(new GameInfo("Tic Tac Toe", () -> new TicTacToeAdapter(chatServer)));
     }
 
@@ -77,8 +76,8 @@ public class GameManager {
         activeGame.addPlayer(host);
         waitingPlayers.clear();
 
-        Message gameMessage = new Message("Game " + gameName + " has been started by " + host.getName() + 
-                ". Type /join to participate! " + 
+        Message gameMessage = new Message("game " + gameName + " has been started by " + host.getName() + 
+                ". type /join to participate! " + 
                 "(" + activeGame.getMinPlayers() + "-" + activeGame.getMaxPlayers() + " players)",
                 null, MessageType.SYSTEM);
         chatServer.broadcastMessage(gameMessage.format(), null);
@@ -126,11 +125,24 @@ public class GameManager {
     
     public void handleGameInput(Person player, String input) {
         if (activeGame != null && activeGame.getPlayers().contains(player)) {
+            Message debugMsg = new Message(
+                "processing game input '" + input + "' from " + player.getName(),
+                null, MessageType.SYSTEM);
+            chatServer.sendMessageToPerson(debugMsg.format(), player);
+            
             activeGame.handleInput(player, input);
             
             if (activeGame.isGameOver()) {
                 endGame();
             }
+        } else if (activeGame == null) {
+            Message errorMsg = new Message("No active game to handle your input.", 
+                                     null, MessageType.SYSTEM);
+            chatServer.sendMessageToPerson(errorMsg.format(), player);
+        } else if (!activeGame.getPlayers().contains(player)) {
+            Message errorMsg = new Message("You're not a participant in the current game.", 
+                                     null, MessageType.SYSTEM);
+            chatServer.sendMessageToPerson(errorMsg.format(), player);
         }
     }
     
