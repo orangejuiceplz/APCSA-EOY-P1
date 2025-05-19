@@ -22,7 +22,8 @@ public class CardsAgainstHumanity {
      public static String getElementFromArray(int rowIndex, int colIndex) throws Exception {
         String csvURL = "https://docs.google.com/spreadsheets/d/1lsy7lIwBe-DWOi2PALZPf5DgXHx9MEvKfRw1GaWQkzg/export?format=csv&gid=10";
         List<String[]> data = new ArrayList<>();
-
+        rowIndex--;
+        colIndex++;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URI(csvURL).toURL().openStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -79,6 +80,7 @@ public class CardsAgainstHumanity {
     }
 }
 
+https://prod.liveshare.vsengsaas.visualstudio.com/join?61675A17A63D20BFABDDE510BA2D78B10929
 
     public static void main(String[] args) throws Exception {
 
