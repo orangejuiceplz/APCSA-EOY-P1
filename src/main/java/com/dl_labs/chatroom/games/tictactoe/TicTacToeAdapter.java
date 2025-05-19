@@ -77,7 +77,15 @@ public class TicTacToeAdapter implements Game {
             gameOver = false;
             currentPlayerIndex = 0;
             
-            // Send initial game state to all players
+            // Announce game start to all players
+            String announcement = "=== TIC TAC TOE GAME STARTED ===\n" +
+                                 "Player 1 (" + players.get(0).getName() + "): X\n" +
+                                 "Player 2 (" + players.get(1).getName() + "): O\n";
+            
+            Message startMsg = new Message(announcement, null, MessageType.SYSTEM);
+            chatServer.broadcastMessage(startMsg.format(), null);
+            
+            // Send initial game state
             sendGameBoard();
             promptCurrentPlayer();
         }
@@ -86,32 +94,14 @@ public class TicTacToeAdapter implements Game {
     private void sendGameBoard() {
         if (game != null) {
             String boardState = getBoardDisplay();
-            Message boardMessage = new Message(boardState, null, MessageType.SYSTEM);
-            for (Person player : players) {
-                sendMessageToPerson(boardMessage.format(), player);
-            }
+            Message boardMessage = new Message("=== CURRENT GAME BOARD ===\n" + boardState, null, MessageType.SYSTEM);
+            chatServer.broadcastMessage(boardMessage.format(), null);
         }
-    }
-    
-    private void sendMessageToPerson(String message, Person person) {
-        // This is a helper method to handle the missing ChatServer.sendMessageToPerson
-        for (Person player : players) {
-            if (player.equals(person)) {
-                Message privateMsg = new Message(message, null, MessageType.SYSTEM);
-                chatServer.broadcastMessage(privateMsg.format(), null);
-                return;
-            }
-        }
-    }
-    
-    private void broadcastMessageToPlayers(String message, ArrayList<Person> recipients) {
-        // This is a helper method to handle the missing ChatServer.broadcastMessageToPlayers
-        Message gameMsg = new Message(message, null, MessageType.SYSTEM);
-        chatServer.broadcastMessage(gameMsg.format(), null);
     }
     
     private String getBoardDisplay() {
-        StringBuilder display = new StringBuilder("Current Board:\n");
+        StringBuilder display = new StringBuilder();
+        display.append("```\n");  // Use code block for better formatting
         display.append("┌───┬───┬───┐\n");
         
         for (int i = 0; i < 3; i++) {
@@ -119,7 +109,12 @@ public class TicTacToeAdapter implements Game {
             for (int j = 0; j < 3; j++) {
                 char cell = game.getBoardCell(i, j);
                 display.append(" ");
-                display.append(cell == '_' ? ' ' : cell);
+                if (cell == '_') {
+                    // Show position number instead of blank space
+                    display.append(i * 3 + j + 1);
+                } else {
+                    display.append(cell);
+                }
                 display.append(" │");
             }
             display.append("\n");
@@ -130,7 +125,7 @@ public class TicTacToeAdapter implements Game {
         }
         
         display.append("└───┴───┴───┘\n");
-        display.append("Positions: 1-9 (left to right, top to bottom)");
+        display.append("```\n");
         
         return display.toString();
     }
@@ -138,9 +133,23 @@ public class TicTacToeAdapter implements Game {
     private void promptCurrentPlayer() {
         if (currentPlayerIndex < players.size()) {
             Person currentPlayer = players.get(currentPlayerIndex);
-            Message promptMessage = new Message(currentPlayer.getName() + ", it's your turn! Enter a position (1-9):", 
-                    null, MessageType.SYSTEM);
-            sendMessageToPerson(promptMessage.format(), currentPlayer);
+            String symbol = (currentPlayerIndex == 0) ? "X" : "O";
+            
+            Message promptMessage = new Message(
+                "=== YOUR TURN ===\n" +
+                "It's your turn, " + currentPlayer.getName() + "!\n" +
+                "You are playing as " + symbol + "\n" +
+                "Enter a number (1-9) to place your " + symbol, 
+                null, MessageType.SYSTEM);
+                
+            chatServer.sendMessageToPerson(promptMessage.format(), currentPlayer);
+            
+            // Let other players know whose turn it is
+            Person otherPlayer = players.get(currentPlayerIndex == 0 ? 1 : 0);
+            Message waitMessage = new Message(
+                "Waiting for " + currentPlayer.getName() + " to make a move...",
+                null, MessageType.SYSTEM);
+            chatServer.sendMessageToPerson(waitMessage.format(), otherPlayer);
         }
     }
     
@@ -157,8 +166,8 @@ public class TicTacToeAdapter implements Game {
         
         // Check if it's this player's turn
         if (!players.get(currentPlayerIndex).equals(player)) {
-            Message notYourTurnMessage = new Message("It's not your turn!", null, MessageType.SYSTEM);
-            sendMessageToPerson(notYourTurnMessage.format(), player);
+            Message notYourTurnMessage = new Message("It's not your turn yet!", null, MessageType.SYSTEM);
+            chatServer.sendMessageToPerson(notYourTurnMessage.format(), player);
             return;
         }
         
@@ -167,7 +176,7 @@ public class TicTacToeAdapter implements Game {
             if (position < 1 || position > 9) {
                 Message invalidInputMessage = new Message("Please enter a number between 1 and 9.", 
                         null, MessageType.SYSTEM);
-                sendMessageToPerson(invalidInputMessage.format(), player);
+                chatServer.sendMessageToPerson(invalidInputMessage.format(), player);
                 return;
             }
             
@@ -179,23 +188,32 @@ public class TicTacToeAdapter implements Game {
             
             if (game.addMove(row, col, currentPlayerSymbol)) {
                 // Broadcast the move to all players
-                Message moveMessage = new Message(player.getName() + " placed " + currentPlayerSymbol + 
-                        " at position " + position, null, MessageType.SYSTEM);
-                broadcastMessageToPlayers(moveMessage.format(), players);
+                Message moveMessage = new Message(
+                    "=== GAME MOVE ===\n" + 
+                    player.getName() + " placed " + currentPlayerSymbol + " at position " + position, 
+                    null, MessageType.SYSTEM);
+                chatServer.broadcastMessage(moveMessage.format(), null);
                 
                 // Check for win condition
                 if (game.checkWin(currentPlayerSymbol)) {
-                    Message winMessage = new Message(player.getName() + " wins the game!", 
-                            null, MessageType.SYSTEM);
-                    broadcastMessageToPlayers(winMessage.format(), players);
+                    Message winMessage = new Message(
+                        "=== GAME OVER ===\n" +
+                        "🎉 " + player.getName() + " wins the game! 🎉", 
+                        null, MessageType.SYSTEM);
+                    chatServer.broadcastMessage(winMessage.format(), null);
+                    sendGameBoard(); // Show final board state
                     gameOver = true;
                     return;
                 }
                 
                 // Check for draw (board full)
                 if (isBoardFull()) {
-                    Message drawMessage = new Message("Game ended in a draw!", null, MessageType.SYSTEM);
-                    broadcastMessageToPlayers(drawMessage.format(), players);
+                    Message drawMessage = new Message(
+                        "=== GAME OVER ===\n" +
+                        "Game ended in a draw!", 
+                        null, MessageType.SYSTEM);
+                    chatServer.broadcastMessage(drawMessage.format(), null);
+                    sendGameBoard(); // Show final board state
                     gameOver = true;
                     return;
                 }
@@ -207,14 +225,15 @@ public class TicTacToeAdapter implements Game {
                 sendGameBoard();
                 promptCurrentPlayer();
             } else {
-                Message invalidMoveMessage = new Message("Invalid move! That position is already taken.", 
-                        null, MessageType.SYSTEM);
-                sendMessageToPerson(invalidMoveMessage.format(), player);
+                Message invalidMoveMessage = new Message(
+                    "That position is already taken. Please choose another.", 
+                    null, MessageType.SYSTEM);
+                chatServer.sendMessageToPerson(invalidMoveMessage.format(), player);
             }
         } catch (NumberFormatException e) {
             Message invalidInputMessage = new Message("Please enter a valid number.", 
                     null, MessageType.SYSTEM);
-            sendMessageToPerson(invalidInputMessage.format(), player);
+            chatServer.sendMessageToPerson(invalidInputMessage.format(), player);
         }
     }
     

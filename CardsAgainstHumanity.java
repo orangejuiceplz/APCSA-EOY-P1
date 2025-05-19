@@ -12,7 +12,8 @@ public class CardsAgainstHumanity {
     private ArrayList<Integer> numsUsed = new ArrayList<>();
     private int numPlayers;
     private int numApples;
-    private boolean requireTwoCards = false;
+    //private boolean requireTwoCards = false;
+    private int[] requiresTwoCards = {7, 8, 32, 37, 42, 70, 76, 81, 88, 91, 110, 111, 124, 125, 132, 135, 143, 154, 155, 172, 196, 200, 203, 218, 283, 298, 301, 309};
 
     public CardsAgainstHumanity(int numberOfPlayers) {
         numPlayers = numberOfPlayers;
@@ -64,9 +65,15 @@ public class CardsAgainstHumanity {
 
     public String getRandomPrompt() {
     int randomNum = (int)((Math.random() * 316) + 7);
+    if (randomNum == 158 || randomNum == 6) { // ^^^^
+        return getRandomPrompt();
+    }
     try {
         numsUsed.add(randomNum);
         return getElementFromArray(randomNum, 1);
+        /*if () {
+            require2Cards = true;
+        }*/
     } catch (Exception e) {
         return getRandomPrompt();
     }
@@ -74,11 +81,13 @@ public class CardsAgainstHumanity {
 
 
     public static void main(String[] args) throws Exception {
+
+        System.out.println("Throws exception");
    
     CardsAgainstHumanity e = new CardsAgainstHumanity(5);
         
     //System.out.println(e.getRandomPrompt());
-    System.out.println(getElementFromArray(293, 3));
+    System.out.println(getElementFromArray(7, 1));
 }
 
 
