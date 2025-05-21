@@ -117,7 +117,7 @@ public void setCards() {
 }
 
 // Add a method to add a single card to a player's hand
-public void addCardToPlayer(int playerIndex, String card) {
+public void addCardToPlayer(int playerIndex) {
     if (playerIndex >= 0 && playerIndex < numPlayers) {
         String[] currentCards = cards.get(playerIndex);
         String[] newCards = new String[currentCards.length + 1];
@@ -127,8 +127,12 @@ public void addCardToPlayer(int playerIndex, String card) {
             newCards[i] = currentCards[i];
         }
         
-        // Add new card
-        newCards[currentCards.length] = card;
+         int randomNum = (int) ((Math.random() * 1420) + 315);
+         while (indexesOfUsed.contains(randomNum)) {
+             randomNum = (int) ((Math.random() * 1420) + 315);
+         }
+         newCards[currentCards.length] = getElementFromArray(randomNum, 1);
+         indexesOfUsed.add(randomNum);
         
         // Update the player's cards
         cards.set(playerIndex, newCards);
