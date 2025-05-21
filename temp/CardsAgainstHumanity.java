@@ -1,4 +1,4 @@
-//package com.dl_labs.chatroom.games.CardsAgainstHumanity;
+//pkg com.dl_labs.chatroom.games.CardsAgainstHumanity;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,9 +14,15 @@ public class CardsAgainstHumanity {
     private int numApples;
     private boolean boolRequireTwoCards = false;
     private int[] requiresTwoCards = {7, 8, 32, 37, 42, 70, 76, 81, 88, 91, 110, 111, 124, 125, 132, 135, 143, 154, 155, 172, 196, 200, 203, 218, 283, 298, 301, 309};
+    private ArrayList<String[]> cards = new ArrayList<>();
+    private ArrayList<Integer> indexesOfUsed = new ArrayList<>();
 
     public CardsAgainstHumanity(int numberOfPlayers) {
         numPlayers = numberOfPlayers;
+        // Initialize the ArrayList with an array for each player
+        for (int i = 0; i < numPlayers; i++) {
+            cards.add(new String[7]); // Giving each player 7 cards initially
+        }
     }
 
      public static String getElementFromArray(int rowIndex, int colIndex) throws Exception {
@@ -64,35 +70,82 @@ public class CardsAgainstHumanity {
 
      
 
-    public String getRandomPrompt() {
-    int randomNum = (int)((Math.random() * 316) + 7);
-    if (randomNum == 158 || randomNum == 6 || numsUsed.indexOf(randomNum) != -1) { // ^^^^
-        return getRandomPrompt();
+    private boolean arrayContains(int[] arr, int value) {
+        for (int i : arr) {
+            if (i == value) {
+                return true;
+            }
+        }
+        return false;
     }
-        try {
+
+public String getRandomPrompt() {
+    int randomNum;
+    do {
+        randomNum = (int) (Math.random() * 312); // Assuming 312 prompts
+    } while (numsUsed.contains(randomNum));
+    try {
         numsUsed.add(randomNum);
-        if (requiresTwoCards.indexOf(randomNum) !( -1{
+        if (arrayContains(requiresTwoCards, randomNum)) {
             boolRequireTwoCards = true;
-        } else {boolRequireTwoCards = false; }
+        } else {
+            boolRequireTwoCards = false;
+        }
         return getElementFromArray(randomNum, 0);
-        /*if () {
-            require2Cards = true;
-        }*/
     } catch (Exception e) {
         return getRandomPrompt();
     }
 }
+public void setCards() {
+    try {
+        for (int i = 0; i < numPlayers; i++) {
+            String[] playerCards = new String[7]; // Create a new array for each player
+            for (int j = 0; j < 7; j++) { // Give each player 7 cards
+                int randomNum = (int) ((Math.random() * 1420) + 315);
+                while (indexesOfUsed.contains(randomNum)) {
+                    randomNum = (int) ((Math.random() * 1420) + 315);
+                }
+                indexesOfUsed.add(randomNum);
+                playerCards[j] = getElementFromArray(randomNum, 1);
+            }
+            cards.set(i, playerCards); // Set the array for this player
+        }
+        System.out.println("Cards distributed to players");
+    } catch (Exception e) {
+        System.out.println("Error setting cards: " + e.getMessage());
+    }
+}
 
+// Add a method to add a single card to a player's hand
+public void addCardToPlayer(int playerIndex, String card) {
+    if (playerIndex >= 0 && playerIndex < numPlayers) {
+        String[] currentCards = cards.get(playerIndex);
+        String[] newCards = new String[currentCards.length + 1];
+        
+        // Copy existing cards
+        for (int i = 0; i < currentCards.length; i++) {
+            newCards[i] = currentCards[i];
+        }
+        
+        // Add new card
+        newCards[currentCards.length] = card;
+        
+        // Update the player's cards
+        cards.set(playerIndex, newCards);
+    }
+}
 
 
     public static void main(String[] args) throws Exception {
 
-        System.out.println("Throws exception");
+        //System.out.println("Throws exception");
    
     CardsAgainstHumanity e = new CardsAgainstHumanity(5);
         
     //System.out.println(e.getRandomPrompt());
     System.out.println(e.getRandomPrompt());
+    e.setCards();
+    //System.out.println(this.cards);
 }
 
 
@@ -102,7 +155,7 @@ public class CardsAgainstHumanity {
 }
 
 
-   
 
-   
+
+
 

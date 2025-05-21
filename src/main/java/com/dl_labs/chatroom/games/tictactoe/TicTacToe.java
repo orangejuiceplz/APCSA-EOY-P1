@@ -3,9 +3,7 @@ package com.dl_labs.chatroom.games.tictactoe;
 import java.util.Scanner;
 
 public class TicTacToe {
-    @SuppressWarnings("unused")
     private char p1Char;
-    @SuppressWarnings("unused")
     private char p2Char;    
     private char[][] board = new char[3][3];
     private static char currentPlayer;
@@ -62,7 +60,7 @@ public class TicTacToe {
         return false;
     }
 
-    public void getMove(char currentSymbol, char firstChar, char secondChar) {
+    public void getMove(char currentSymbol, char firstChar, char secondChar) { 
         Scanner scanner = new Scanner(System.in);
         //System.out.println("[1 2 3] |  [" + board[0][0] + " " + board[0][1] + " " + board[0][2] + " ]");
         //System.out.println("[4 5 6] |  [" + board[1][0] + " " + board[1][1] + " " + board[1][2] + " ]");

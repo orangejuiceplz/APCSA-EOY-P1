@@ -2,7 +2,6 @@ package com.dl_labs.chatroom.games;
 
 import java.util.ArrayList;
 
-import com.dl_labs.chatroom.games.tictactoe.TicTacToe;
 import com.dl_labs.chatroom.games.tictactoe.TicTacToeAdapter;
 import com.dl_labs.chatroom.user_stuff.Message;
 import com.dl_labs.chatroom.user_stuff.Person;
