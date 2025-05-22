@@ -7,6 +7,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.Math.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class CardsAgainstHumanity {
     private ArrayList<Integer> numsUsed = new ArrayList<>();
@@ -97,27 +99,37 @@ public String getRandomPrompt() {
     }
 }
 public void setCards() {
+    int randomNum = (int) ((Math.random() * 1420) + 315);
+    //System.out.println("Initial random:" + randomNum);
     try {
         for (int i = 0; i < numPlayers; i++) {
             String[] playerCards = new String[7]; // Create a new array for each player
             for (int j = 0; j < 7; j++) { // Give each player 7 cards
-                int randomNum = (int) ((Math.random() * 1420) + 315);
+                
                 while (indexesOfUsed.contains(randomNum)) {
                     randomNum = (int) ((Math.random() * 1420) + 315);
                 }
+                //System.out.println("New Random Num:" + randomNum);
                 indexesOfUsed.add(randomNum);
-                playerCards[j] = getElementFromArray(randomNum, 1);
+                playerCards[j] = getElementFromArray(randomNum, 0);
+                //System.out.println("col index 1:" + getElementFromArray(randomNum, 1));
+                //System.out.println("col index 0:" + getElementFromArray(randomNum, 0));
             }
             cards.set(i, playerCards); // Set the array for this player
         }
         System.out.println("Cards distributed to players");
+        
+        /*for (String[] array : cards) {
+            System.out.println(Arrays.toString(array));
+        }*/
+
     } catch (Exception e) {
         System.out.println("Error setting cards: " + e.getMessage());
     }
 }
 
 // Add a method to add a single card to a player's hand
-public void addCardToPlayer(int playerIndex) {
+public void addCardToPlayer(int playerIndex) throws Exception {
     if (playerIndex >= 0 && playerIndex < numPlayers) {
         String[] currentCards = cards.get(playerIndex);
         String[] newCards = new String[currentCards.length + 1];
@@ -143,13 +155,18 @@ public void addCardToPlayer(int playerIndex) {
     public static void main(String[] args) throws Exception {
 
         //System.out.println("Throws exception");
-   
-    CardsAgainstHumanity e = new CardsAgainstHumanity(5);
-        
-    //System.out.println(e.getRandomPrompt());
-    System.out.println(e.getRandomPrompt());
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Welcome to Cards Against Humanity! How many players will be playing?");
+    int numPlayers = scanner.nextInt();
+    while (numPlayers < 2 || numPlayers > 8) {
+        System.out.println("Invalid number of players. Must be 2-8.");
+        numPlayers = scanner.nextInt();
+    }
+    System.out.println("Setting up a game with " + numPlayers + " players, this will take a minute.");
+    CardsAgainstHumanity e = new CardsAgainstHumanity(numPlayers);
+    
     e.setCards();
-    //System.out.println(this.cards);
+    
 }
 
 
