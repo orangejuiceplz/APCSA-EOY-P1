@@ -220,22 +220,20 @@ public void addCardToPlayer(int playerIndex) throws Exception {
     int cardChoice = 0;
     int cardMasterIndexThing = 1;
     int cardMasterPlayer = cardMasterIndex + 1;
+    
     while (true) {
-        
-            if (cardMasterIndex + 1 == numPlayers) {
-                cardMasterIndex = 1;
-            } else {
-                cardMasterIndex++;
-            }
+        chosenCards.clear();
             index = 1;
+             //qweqweqwe
             int indexToUse = 0;
-            cardMasterPlayer = cardMasterIndex + 1;
-            System.out.println("The current Card Master is player " + (cardMasterIndex + 2));
+            //cardMasterPlayer = cardMasterIndex + 1;
+            System.out.println("The current Card Master is player " + (cardMasterIndex));
             System.out.println("Prompt: " + e.getRandomPrompt());
             for (int i = 0; i < numPlayers; i++) {
-                if (i != cardMasterIndex + 1) {
+                if (i != cardMasterIndex - 1) {
+                    System.out.println("cardMasterIndex: " + cardMasterIndex);
                     showCards(i);
-                    indexToUse = i+1;
+                    indexToUse = i + 1;
                     System.out.println("Player " + indexToUse + ", which card will you use?");
                     cardChoice = scanner.nextInt();
                     while (cardChoice < 1 || cardChoice > 7) {
@@ -243,6 +241,12 @@ public void addCardToPlayer(int playerIndex) throws Exception {
                         cardChoice = scanner.nextInt();
                     }
                     chosenCards.add(cards.get(i)[cardChoice-1]);
+                    int asd = (int) (Math.random() * 1420) + 315;
+                    while (e.indexesOfUsed.contains(asd)) {
+                        asd = (int) ((Math.random() * 1420) + 315);
+                    }
+                    cards.get(i)[cardChoice-1] = getElementFromArray(asd, 0);
+                    e.indexesOfUsed.add(asd);
                 } 
             }
             System.out.println(chosenCards + "\n");
@@ -251,9 +255,9 @@ public void addCardToPlayer(int playerIndex) throws Exception {
             System.out.print("\n"); //Add code to skip the card master when people are inputting their prompts.
 
             System.out.println("Prompt: " + currentPrompt);
-
+            cardMasterIndexThing = 1;
             for (String str : chosenCards) {
-                System.out.println(cardMasterIndexThing + ": " + str);
+                //System.out.println(cardMasterIndexThing + ": " + str);
                 cardMasterIndexThing++;
             }
             int bestCard = scanner.nextInt();
@@ -264,19 +268,15 @@ public void addCardToPlayer(int playerIndex) throws Exception {
             System.out.println("Prompt " + bestCard + " (" + chosenCards.get(bestCard - 1).substring(0, chosenCards.get(bestCard - 1).length()-1) + ") won. Starting next round...");
         } 
 
+        if (cardMasterIndex == numPlayers) {
+                cardMasterIndex = 1;
+            } else {
+                cardMasterIndex++;
+            }
     }
  }
-
-
-
-   
-
-
-//To do: find a way to determine whether card requires 2 inputs or 1 (Row C)
-//       Code basic game (w/ help from Shiven for multiplayer);
-
 }
-
+// Code works mostly, it can remove used phrases and replace them with new ones making sure they havent yet been used
 
 
 
