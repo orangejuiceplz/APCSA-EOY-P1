@@ -21,6 +21,7 @@ public class CardsAgainstHumanity {
     private ArrayList<Integer> indexesOfUsed = new ArrayList<>();
     private static int cardMasterIndex = 0;
     private static ArrayList<String> chosenCards = new ArrayList<>();
+    public static String currentPrompt = "";
 
     public CardsAgainstHumanity(int numberOfPlayers) {
         numPlayers = numberOfPlayers;
@@ -96,6 +97,7 @@ public String getRandomPrompt() {
         } else {
             boolRequireTwoCards = false;
         }
+        currentPrompt = getElementFromArray(randomNum, 0);
         return getElementFromArray(randomNum, 0);
     } catch (Exception e) {
         return getRandomPrompt();
@@ -216,9 +218,16 @@ public void addCardToPlayer(int playerIndex) throws Exception {
     int index = 0;
     int cardChoice = 0;
     int cardMasterIndexThing = 1;
+    int cardMasterPlayer = cardMasterIndex + 1;
     while (true) {
+        if (cardMasterIndex + 1 == numPlayers) {
+            cardMasterIndex = 1;
+        } else {
+            cardMasterIndex++;
+        }
         index = 1;
         int indexToUse = 0;
+        System.out.println("The current Card Master is player " + cardMasterIndex);
         System.out.println("Prompt: " + e.getRandomPrompt());
         for (int i = 0; i < numPlayers; i++) {
             showCards(i);
@@ -230,21 +239,32 @@ public void addCardToPlayer(int playerIndex) throws Exception {
                 cardChoice = scanner.nextInt();
             }
             chosenCards.add(cards.get(i)[cardChoice-1]);
-
-            System.out.println(chosenCards + "\n\n");
-            chosenCards = shuffleArray(chosenCards);
-            System.out.println("Card Master, which card will you choose?"); //Add code to make sure the person who responds is the card master
-            System.out.println("\n\n");
-
-            for (String str : chosenCards) {
-                System.out.println(cardMasterIndexThing + ": " + str);
-            }
         }
+        System.out.println(chosenCards + "\n");
+        chosenCards = shuffleArray(chosenCards);
+        System.out.println("Card Master, which card will you choose?"); //Add code to make sure the person who responds is the card master
+        System.out.print("\n"); //Add code to skip the card master when people are inputting their prompts.
+
+        System.out.println("Prompt: " + currentPrompt);
+
+        for (String str : chosenCards) {
+            System.out.println(cardMasterIndexThing + ": " + str);
+            cardMasterIndexThing++;
+        }
+        int bestCard = scanner.nextInt();
+        while (bestCard < 1 || bestCard > numPlayers) {
+            System.out.println("Please select a card in bounds (1 - " + numPlayers + ")");
+            bestCard = scanner.nextInt();
+        }
+        System.out.println("Prompt " + bestCard + " (" + chosenCards.get(bestCard - 1).substring(0, chosenCards.get(bestCard - 1).length()-1) + ") won. Starting next round...");
+        
+
     }
+ }
 
 
 
-}   
+   
 
 
 //To do: find a way to determine whether card requires 2 inputs or 1 (Row C)
