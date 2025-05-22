@@ -216,48 +216,53 @@ public void addCardToPlayer(int playerIndex) throws Exception {
         cardMasterIndex = scanner.nextInt();
     }
     int index = 0;
+    
     int cardChoice = 0;
     int cardMasterIndexThing = 1;
     int cardMasterPlayer = cardMasterIndex + 1;
     while (true) {
-        if (cardMasterIndex + 1 == numPlayers) {
-            cardMasterIndex = 1;
-        } else {
-            cardMasterIndex++;
-        }
-        index = 1;
-        int indexToUse = 0;
-        System.out.println("The current Card Master is player " + cardMasterIndex);
-        System.out.println("Prompt: " + e.getRandomPrompt());
-        for (int i = 0; i < numPlayers; i++) {
-            showCards(i);
-            indexToUse = i+1;
-            System.out.println("Player " + indexToUse + ", which card will you use?");
-            cardChoice = scanner.nextInt();
-            while (cardChoice < 1 || cardChoice > 7) {
-                System.out.println("Not a valid option. Please choose 1-7");
-                cardChoice = scanner.nextInt();
-            }
-            chosenCards.add(cards.get(i)[cardChoice-1]);
-        }
-        System.out.println(chosenCards + "\n");
-        chosenCards = shuffleArray(chosenCards);
-        System.out.println("Card Master, which card will you choose?"); //Add code to make sure the person who responds is the card master
-        System.out.print("\n"); //Add code to skip the card master when people are inputting their prompts.
-
-        System.out.println("Prompt: " + currentPrompt);
-
-        for (String str : chosenCards) {
-            System.out.println(cardMasterIndexThing + ": " + str);
-            cardMasterIndexThing++;
-        }
-        int bestCard = scanner.nextInt();
-        while (bestCard < 1 || bestCard > numPlayers) {
-            System.out.println("Please select a card in bounds (1 - " + numPlayers + ")");
-            bestCard = scanner.nextInt();
-        }
-        System.out.println("Prompt " + bestCard + " (" + chosenCards.get(bestCard - 1).substring(0, chosenCards.get(bestCard - 1).length()-1) + ") won. Starting next round...");
         
+            if (cardMasterIndex + 1 == numPlayers) {
+                cardMasterIndex = 1;
+            } else {
+                cardMasterIndex++;
+            }
+            index = 1;
+            int indexToUse = 0;
+            cardMasterPlayer = cardMasterIndex + 1;
+            System.out.println("The current Card Master is player " + (cardMasterIndex + 2));
+            System.out.println("Prompt: " + e.getRandomPrompt());
+            for (int i = 0; i < numPlayers; i++) {
+                if (i != cardMasterIndex + 1) {
+                    showCards(i);
+                    indexToUse = i+1;
+                    System.out.println("Player " + indexToUse + ", which card will you use?");
+                    cardChoice = scanner.nextInt();
+                    while (cardChoice < 1 || cardChoice > 7) {
+                        System.out.println("Not a valid option. Please choose 1-7");
+                        cardChoice = scanner.nextInt();
+                    }
+                    chosenCards.add(cards.get(i)[cardChoice-1]);
+                } 
+            }
+            System.out.println(chosenCards + "\n");
+            chosenCards = shuffleArray(chosenCards);
+            System.out.println("Card Master, which card will you choose?"); //Add code to make sure the person who responds is the card master
+            System.out.print("\n"); //Add code to skip the card master when people are inputting their prompts.
+
+            System.out.println("Prompt: " + currentPrompt);
+
+            for (String str : chosenCards) {
+                System.out.println(cardMasterIndexThing + ": " + str);
+                cardMasterIndexThing++;
+            }
+            int bestCard = scanner.nextInt();
+            while (bestCard < 1 || bestCard > numPlayers) {
+                System.out.println("Please select a card in bounds (1 - " + numPlayers + ")");
+                bestCard = scanner.nextInt();
+            
+            System.out.println("Prompt " + bestCard + " (" + chosenCards.get(bestCard - 1).substring(0, chosenCards.get(bestCard - 1).length()-1) + ") won. Starting next round...");
+        } 
 
     }
  }
