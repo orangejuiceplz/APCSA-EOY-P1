@@ -9,15 +9,18 @@ import java.util.List;
 import java.lang.Math.*;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Random;
 
 public class CardsAgainstHumanity {
     private ArrayList<Integer> numsUsed = new ArrayList<>();
-    private int numPlayers;
+    private static int numPlayers;
     private int numApples;
     private boolean boolRequireTwoCards = false;
     private int[] requiresTwoCards = {7, 8, 32, 37, 42, 70, 76, 81, 88, 91, 110, 111, 124, 125, 132, 135, 143, 154, 155, 172, 196, 200, 203, 218, 283, 298, 301, 309};
-    private ArrayList<String[]> cards = new ArrayList<>();
+    private static ArrayList<String[]> cards = new ArrayList<>();
     private ArrayList<Integer> indexesOfUsed = new ArrayList<>();
+    private static int cardMasterIndex = 0;
+    private static ArrayList<String> chosenCards = new ArrayList<>();
 
     public CardsAgainstHumanity(int numberOfPlayers) {
         numPlayers = numberOfPlayers;
@@ -128,6 +131,41 @@ public void setCards() {
     }
 }
 
+public static void showCards(int playerIndex) {
+    int indexToUse = playerIndex + 1;
+    String toReturn = "\nPlayer " + indexToUse + "'s current cards: \n";
+    int i = 1;
+    for (String prompt : cards.get(playerIndex)) {
+        toReturn += i + ": " + prompt + "\n";
+        i++;
+    }
+    toReturn += "\n";
+    System.out.println(toReturn);
+}
+
+public static String[] shuffleArray(String[] arr) {
+    Random rand = new Random();
+    for (int i = arr.length - 1; i > 0; i--) {
+        int j = rand.nextInt(i + 1); // Generate random index between 0 and i (inclusive)
+        arr = swap(arr, i, j);
+    }
+    return arr;
+}
+
+public static String swap(String[] arr, int i, int j) {
+    int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+        return arr;
+}
+  
+/*public static void printArray(int[] arr) {
+  for (int element : arr) {
+    System.out.print(element + " ");
+  }
+  System.out.println();*/
+}
+
 // Add a method to add a single card to a player's hand
 public void addCardToPlayer(int playerIndex) throws Exception {
     if (playerIndex >= 0 && playerIndex < numPlayers) {
@@ -152,6 +190,7 @@ public void addCardToPlayer(int playerIndex) throws Exception {
 }
 
 
+
     public static void main(String[] args) throws Exception {
 
         //System.out.println("Throws exception");
@@ -166,8 +205,46 @@ public void addCardToPlayer(int playerIndex) throws Exception {
     CardsAgainstHumanity e = new CardsAgainstHumanity(numPlayers);
     
     e.setCards();
-    
-}
+    //System.out.println(showCards(0));
+    //System.out.println(showCards(3));
+    System.out.println("Game set up. Which player will be the Card Master first? (1 - " + numPlayers + ")"); //You have to set up a way for everyone to know their numbers (1 - numPlayers) while the indexes used are (0 - numPlayers-1)
+    cardMasterIndex = scanner.nextInt();
+    while (cardMasterIndex < 1 || cardMasterIndex > numPlayers) {
+        System.out.println("Invalid player number. Valid numbers are 1-" + numPlayers + ".");
+        cardMasterIndex = scanner.nextInt();
+    }
+    int index = 0;
+    int cardChoice = 0;
+    int cardMasterIndexThing = 1;
+    while (true) {
+        index = 1;
+        int indexToUse = 0;
+        System.out.println("Prompt: " + e.getRandomPrompt());
+        for (int i = 0; i < numPlayers; i++) {
+            showCards(i);
+            indexToUse = i+1;
+            System.out.println("Player " + indexToUse + ", which card will you use?");
+            cardChoice = scanner.nextInt();
+            while (cardChoice < 1 || cardChoice > 7) {
+                System.out.println("Not a valid option. Please choose 1-7");
+                cardChoice = scanner.nextInt();
+            }
+            chosenCards.add(cards.get(i)[cardChoice-1]);
+
+            System.out.println(chosenCards + "\n\n");
+            chosenCards = shuffleArray(chosenCards);
+            System.out.println("Card Master, which card will you choose?"); //Add code to make sure the person who responds is the card master
+            System.out.println("\n\n");
+
+            for (String str : chosenCards) {
+                System.out.println(cardMasterIndexThing + ": " + str);
+            }
+        }
+    }
+
+
+
+}   
 
 
 //To do: find a way to determine whether card requires 2 inputs or 1 (Row C)
