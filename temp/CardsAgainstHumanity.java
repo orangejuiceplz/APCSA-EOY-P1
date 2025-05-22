@@ -143,19 +143,19 @@ public static void showCards(int playerIndex) {
     System.out.println(toReturn);
 }
 
-public static String[] shuffleArray(String[] arr) {
+public static ArrayList<String> shuffleArray(ArrayList<String> arr) {
     Random rand = new Random();
-    for (int i = arr.length - 1; i > 0; i--) {
+    for (int i = arr.size() - 1; i > 0; i--) {
         int j = rand.nextInt(i + 1); // Generate random index between 0 and i (inclusive)
         arr = swap(arr, i, j);
     }
     return arr;
 }
 
-public static String swap(String[] arr, int i, int j) {
-    int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
+public static ArrayList<String> swap(ArrayList<String> arr, int i, int j) {
+    String temp = arr.get(i);
+        arr.set(i, arr.get(j));
+        arr.set(j, temp);
         return arr;
 }
   
@@ -163,8 +163,8 @@ public static String swap(String[] arr, int i, int j) {
   for (int element : arr) {
     System.out.print(element + " ");
   }
-  System.out.println();*/
-}
+  System.out.println();
+}*/
 
 // Add a method to add a single card to a player's hand
 public void addCardToPlayer(int playerIndex) throws Exception {
