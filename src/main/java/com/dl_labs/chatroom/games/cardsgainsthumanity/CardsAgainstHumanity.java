@@ -1,4 +1,4 @@
-//pkg com.dl_labs.chatroom.games.CardsAgainstHumanity;
+package com.dl_labs.chatroom.games.cardsgainsthumanity;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
