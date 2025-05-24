@@ -1,5 +1,4 @@
 package com.dl_labs.chatroom.games.cardsgainsthumanity;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -10,13 +9,14 @@ import java.lang.Math.*;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 public class CardsAgainstHumanity {
     private ArrayList<Integer> numsUsed = new ArrayList<>();
     private static int numPlayers;
     private int numApples;
     private boolean boolRequireTwoCards = false;
-    private int[] requiresTwoCards = {7, 8, 32, 37, 42, 70, 76, 81, 88, 91, 110, 111, 124, 125, 132, 135, 143, 154, 155, 172, 196, 200, 203, 218, 283, 298, 301, 309};
+    private final int[] requiresTwoCards = {7, 8, 32, 37, 42, 70, 76, 81, 88, 91, 110, 111, 124, 125, 132, 135, 143, 154, 155, 172, 196, 200, 203, 218, 283, 298, 301, 309};
     private static ArrayList<String[]> cards = new ArrayList<>();
     private ArrayList<Integer> indexesOfUsed = new ArrayList<>();
     private static int cardMasterIndex = 0;
@@ -88,8 +88,8 @@ public class CardsAgainstHumanity {
 public String getRandomPrompt() {
     int randomNum;
     do {
-        randomNum = (int) (Math.random() * 312); // Assuming 312 prompts
-    } while (numsUsed.contains(randomNum));
+        randomNum = (int) (Math.random() * 305) + 6; // Assuming 312 prompts
+    } while (numsUsed.contains(randomNum) || Arrays.binarySearch(requiresTwoCards, randomNum) >= 0);
     try {
         numsUsed.add(randomNum);
         if (arrayContains(requiresTwoCards, randomNum)) {
@@ -257,7 +257,7 @@ public void addCardToPlayer(int playerIndex) throws Exception {
             System.out.println("Prompt: " + currentPrompt);
             cardMasterIndexThing = 1;
             for (String str : chosenCards) {
-                //System.out.println(cardMasterIndexThing + ": " + str);
+                System.out.println(cardMasterIndexThing + ": " + str);
                 cardMasterIndexThing++;
             }
             int bestCard = scanner.nextInt();
@@ -267,6 +267,7 @@ public void addCardToPlayer(int playerIndex) throws Exception {
             
             System.out.println("Prompt " + bestCard + " (" + chosenCards.get(bestCard - 1).substring(0, chosenCards.get(bestCard - 1).length()-1) + ") won. Starting next round...");
         } 
+        //System.out.println("Winners: " + chosenCards.toString());
 
         if (cardMasterIndex == numPlayers) {
                 cardMasterIndex = 1;
@@ -276,7 +277,7 @@ public void addCardToPlayer(int playerIndex) throws Exception {
     }
  }
 }
-// Code works mostly, it can remove used phrases and replace them with new ones making sure they havent yet been used
+// Add winners system
 
 
 
