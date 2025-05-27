@@ -77,7 +77,6 @@ public class TicTacToeAdapter implements Game {
             gameOver = false;
             currentPlayerIndex = 0;
             
-            // Announce game start to all players
             String announcement = "=== TIC TAC TOE GAME STARTED ===\n" +
                                  "Player 1 (" + players.get(0).getName() + "): X\n" +
                                  "Player 2 (" + players.get(1).getName() + "): O\n";
@@ -85,7 +84,6 @@ public class TicTacToeAdapter implements Game {
             Message startMsg = new Message(announcement, null, MessageType.SYSTEM);
             chatServer.broadcastMessage(startMsg.format(), null);
             
-            // Send initial game state
             sendGameBoard();
             promptCurrentPlayer();
         }
@@ -110,13 +108,10 @@ public class TicTacToeAdapter implements Game {
                 char cell = game.getBoardCell(i, j);
                 display.append(" ");
                 if (cell == '_') {
-                    // Show position number instead of blank space
                     display.append(i * 3 + j + 1);
                 } else if (cell == 'X') {
-                    // Add color formatting for X (using console color codes)
                     display.append("X");
                 } else if (cell == 'O') {
-                    // Add color formatting for O
                     display.append("O");
                 } else {
                     display.append(cell);
@@ -149,7 +144,6 @@ public class TicTacToeAdapter implements Game {
                 
             chatServer.sendMessageToPerson(promptMessage.format(), currentPlayer);
             
-            // Let other players know whose turn it is
             Person otherPlayer = players.get(currentPlayerIndex == 0 ? 1 : 0);
             Message waitMessage = new Message(
                 "Waiting for " + currentPlayer.getName() + " to make a move...",
@@ -169,7 +163,6 @@ public class TicTacToeAdapter implements Game {
             return;
         }
         
-        // Check if it's this player's turn
         if (!players.get(currentPlayerIndex).equals(player)) {
             Message notYourTurnMessage = new Message("It's not your turn yet!", null, MessageType.SYSTEM);
             chatServer.sendMessageToPerson(notYourTurnMessage.format(), player);
@@ -185,48 +178,42 @@ public class TicTacToeAdapter implements Game {
                 return;
             }
             
-            // Convert 1-9 position to row, col
             int row = (position - 1) / 3;
             int col = (position - 1) % 3;
             
             char currentPlayerSymbol = (currentPlayerIndex == 0) ? 'X' : 'O';
             
             if (game.addMove(row, col, currentPlayerSymbol)) {
-                // Broadcast the move to all players
                 Message moveMessage = new Message(
                     "=== GAME MOVE ===\n" + 
                     player.getName() + " placed " + currentPlayerSymbol + " at position " + position, 
                     null, MessageType.SYSTEM);
                 chatServer.broadcastMessage(moveMessage.format(), null);
                 
-                // Check for win condition
                 if (game.checkWin(currentPlayerSymbol)) {
                     Message winMessage = new Message(
                         "=== GAME OVER ===\n" +
                         "🎉 " + player.getName() + " wins the game! 🎉", 
                         null, MessageType.SYSTEM);
                     chatServer.broadcastMessage(winMessage.format(), null);
-                    sendGameBoard(); // Show final board state
+                    sendGameBoard();
                     gameOver = true;
                     return;
                 }
                 
-                // Check for draw (board full)
                 if (isBoardFull()) {
                     Message drawMessage = new Message(
                         "=== GAME OVER ===\n" +
                         "Game ended in a draw!", 
                         null, MessageType.SYSTEM);
                     chatServer.broadcastMessage(drawMessage.format(), null);
-                    sendGameBoard(); // Show final board state
+                    sendGameBoard();
                     gameOver = true;
                     return;
                 }
                 
-                // Switch to the next player
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
                 
-                // Send updated board and prompt next player
                 sendGameBoard();
                 promptCurrentPlayer();
             } else {
