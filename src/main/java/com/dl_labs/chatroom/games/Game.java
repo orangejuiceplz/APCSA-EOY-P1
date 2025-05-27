@@ -19,4 +19,3 @@ public interface Game {
     ArrayList<Person> getPlayers();
  
 }
-//
