@@ -53,7 +53,6 @@ public class ClientHandler extends Thread {
                     chatServer.getGameManager().isPlayerInGame(person) && 
                     isGameInput(inputLine)) {
                     
-                    // Route input to game manager
                     chatServer.getGameManager().handleGameInput(person, inputLine);
                     continue;
                 }
@@ -161,7 +160,7 @@ public class ClientHandler extends Thread {
         
         String[] parts = input.split("\\s+", 2);
         if (parts.length == 1) {
-            // Just "/game" - show available games
+            // "/game" - show available games
             ArrayList<String> games = chatServer.getGameManager().getAvailableGames();
             if (games.isEmpty()) {
                 Message errorMsg = new Message("No games are available.", null, MessageType.SYSTEM);
@@ -176,7 +175,7 @@ public class ClientHandler extends Thread {
                 sendMessage(gamesMsg.format());
             }
         } else {
-            // "/game <name>" - start the specified game
+            // "/game <name>" 
             String gameName = parts[1].trim();
             if (chatServer.getGameManager().hasActiveGame()) {
                 Message errorMsg = new Message("A game is already in progress.", null, MessageType.SYSTEM);
@@ -205,10 +204,8 @@ public class ClientHandler extends Thread {
         }
     }
 
-    // Helper method to determine if input should be treated as a game command
     private boolean isGameInput(String input) {
-        // This is a simple check for TicTacToe (1-9)
-        // Can be expanded for other games as needed
+
         if (input.trim().matches("\\d+")) {
             return true;
         }
