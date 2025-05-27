@@ -191,6 +191,30 @@ public void addCardToPlayer(int playerIndex) throws Exception {
     }
 }
 
+public static String[] getPlayerCards(int playerIndex) {
+    if (playerIndex >= 0 && playerIndex < cards.size()) {
+        return cards.get(playerIndex);
+    }
+    return new String[0];
+}
+
+public void replacePlayerCard(int playerIndex, int cardIndex) throws Exception {
+    if (playerIndex >= 0 && playerIndex < cards.size()) {
+        String[] playerCards = cards.get(playerIndex);
+        if (cardIndex >= 0 && cardIndex < playerCards.length) {
+            // Get a new random card
+            int randomNum = (int) ((Math.random() * 1420) + 315);
+            while (indexesOfUsed.contains(randomNum)) {
+                randomNum = (int) ((Math.random() * 1420) + 315);
+            }
+            
+            // Replace the card
+            playerCards[cardIndex] = getElementFromArray(randomNum, 0);
+            indexesOfUsed.add(randomNum);
+        }
+    }
+}
+
 
 
     public static void main(String[] args) throws Exception {
