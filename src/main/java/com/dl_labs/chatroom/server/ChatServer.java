@@ -96,12 +96,10 @@ public class ChatServer {
         return people;
     }
 
-    // Get GameManager
     public GameManager getGameManager() {
         return gameManager;
     }
 
-    // These methods are used by the game system
     public void sendMessageToPerson(String message, Person person) {
         for (ClientHandler client : clients) {
             if (client.getPerson() != null && client.getPerson().equals(person)) {
