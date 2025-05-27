@@ -42,7 +42,9 @@ public class GameManager {
     }
 
     private void registerGames() {
-        availableGames.add(new GameInfo("Tic Tac Toe", () -> new TicTacToeAdapter(chatServer)));
+        availableGames.add(new GameInfo("TicTacToe", () -> new TicTacToeAdapter(chatServer)));
+        
+        availableGames.add(new GameInfo("CardsAgainstHumanity", () -> new com.dl_labs.chatroom.games.cardsgainsthumanity.CardsAgainstHumanityAdapter(chatServer)));
     }
 
     public ArrayList<String> getAvailableGames() {
