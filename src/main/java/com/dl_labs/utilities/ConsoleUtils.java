@@ -160,11 +160,6 @@ public class ConsoleUtils {
         WARNING
     }
     
-    /**
-     * Displays a simple progress animation for a specified duration
-     * @param message The message to display alongside the animation
-     * @param durationMs The duration to show the animation in milliseconds
-     */
     public static void showProgressAnimation(String message, long durationMs) {
         char[] animationChars = new char[]{'|', '/', '-', '\\'};
         long startTime = System.currentTimeMillis();

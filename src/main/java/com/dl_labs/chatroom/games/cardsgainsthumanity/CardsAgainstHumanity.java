@@ -2,14 +2,11 @@ package com.dl_labs.chatroom.games.cardsgainsthumanity;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.Math.*;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 public class CardsAgainstHumanity {
     private ArrayList<Integer> numsUsed = new ArrayList<>();
